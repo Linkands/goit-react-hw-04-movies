@@ -1,12 +1,14 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-function MoviesList({ moviesData, onClick }) {
+function MoviesList({ moviesData }) {
   return (
     <div>
-      <h2>Trending today</h2>
       <ul>
         {moviesData.map((movie) => (
-          <li key={movie.id}>{movie.original_title}</li>
+          <li key={movie.id}>
+            <Link to={`/movies/${movie.id}`}>{movie.original_title}</Link>
+          </li>
         ))}
       </ul>
     </div>

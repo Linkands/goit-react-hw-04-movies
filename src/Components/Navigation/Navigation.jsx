@@ -1,12 +1,21 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { StyledNavLink, StyledNav } from './Navigation.styled'
 
 function Navigation() {
   return (
-    <nav>
-      <NavLink to="/">Home</NavLink>
-      <NavLink to="/movies">Movies</NavLink>
-    </nav>
+    <StyledNav>
+      <StyledNavLink exact to="/" className="link" activeClassName="activeLink">
+        Home
+      </StyledNavLink>
+      <StyledNavLink
+        exact
+        to="/movies"
+        className="link"
+        activeClassName="activeLink"
+      >
+        Movies
+      </StyledNavLink>
+    </StyledNav>
   )
 }
 
