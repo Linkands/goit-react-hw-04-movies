@@ -7,12 +7,7 @@ function Navigation() {
       <StyledNavLink exact to="/" className="link" activeClassName="activeLink">
         Home
       </StyledNavLink>
-      <StyledNavLink
-        exact
-        to="/movies"
-        className="link"
-        activeClassName="activeLink"
-      >
+      <StyledNavLink to="/movies" className="link" activeClassName="activeLink">
         Movies
       </StyledNavLink>
     </StyledNav>

@@ -1,5 +1,12 @@
-import { useState, useEffect } from 'react'
-import { useParams, useRouteMatch, Route, Link } from 'react-router-dom'
+import { useState, useEffect, useRef } from 'react'
+import {
+  useParams,
+  useRouteMatch,
+  Route,
+  Link,
+  useLocation,
+  useHistory,
+} from 'react-router-dom'
 import { fetchMovieDetails } from '../APIservice/APIservice'
 import Cast from '../Cast/Cast'
 import Reviews from '../Reviews/Reviews'
@@ -11,6 +18,8 @@ function MovieDetailsPage() {
   const params = useParams()
   const IMG_PATH = 'https://image.tmdb.org/t/p/original/'
   const imgNotFound = 'Sorry, no image found'
+  const search = useRef(null)
+  const history = useHistory()
 
   useEffect(() => {
     async function render() {
@@ -20,8 +29,18 @@ function MovieDetailsPage() {
     render()
   }, [params.movieId])
 
+  const goBackBtn = () => {
+    if (search.current?.search) {
+      history.push(`${search.current.pathname}${search.current?.search}`)
+    }
+    history.push('/')
+  }
+
   return (
     <>
+      <button type="button" onClick={goBackBtn}>
+        Go back
+      </button>
       <div className="movieDetailsWrapper">
         {id && (
           <>
@@ -49,16 +68,19 @@ function MovieDetailsPage() {
         )}
       </div>
       <div>
-        <div>
+        <div className="additionalInfo">
           <p>Additional Information</p>
           <Link
+            className="infoLink"
             to={{
               pathname: `${url}/cast`,
             }}
           >
             Cast
           </Link>
-          <Link to={`${url}/reviews`}>Reviews</Link>
+          <Link className="infoLink" to={`${url}/reviews`}>
+            Reviews
+          </Link>
         </div>
 
         <Route path={`${path}/cast`}>

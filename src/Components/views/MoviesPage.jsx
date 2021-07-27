@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { fetchMoviesBySearch } from '../APIservice/APIservice'
+import { useHistory, useLocation } from 'react-router'
 import MoviesList from '../MoviesList/MoviesList'
 
 function MoviesPage() {
@@ -7,6 +8,8 @@ function MoviesPage() {
   const [moviesList, setMoviesList] = useState([])
 
   const mounted = useRef(false)
+  const history = useHistory()
+  const location = useLocation()
 
   useEffect(() => {})
   const handleSearch = (e) => {
@@ -21,12 +24,11 @@ function MoviesPage() {
     }
     async function render() {
       const movie = await fetchMoviesBySearch(searchQuery)
-      console.log(searchQuery)
-      console.log(movie)
       setMoviesList(movie)
+      history.push({ ...location, search: `query=${searchQuery}` })
     }
     render()
-  }, [searchQuery])
+  }, [searchQuery]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>

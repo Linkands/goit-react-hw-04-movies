@@ -9,7 +9,6 @@ function HomePage() {
     async function render() {
       const movies = await fetchMovies()
       setTrendingMovies(movies)
-      console.log(trendingMovies)
     }
     render()
   }, [])

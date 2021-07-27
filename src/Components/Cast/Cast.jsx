@@ -19,7 +19,7 @@ function Cast() {
   return (
     <>
       {cast && (
-        <ul>
+        <ul className="cast">
           {cast.map((cast) => (
             <li key={cast.id}>
               <img

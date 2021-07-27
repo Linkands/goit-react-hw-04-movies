@@ -17,7 +17,7 @@ function Reviews() {
     <>
       {reviews &&
         (reviews.length > 0 ? (
-          <ul>
+          <ul className="reviews">
             {reviews.map((review) => (
               <li key={review.id}>
                 <h4>{review.author}</h4>

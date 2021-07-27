@@ -22,3 +22,13 @@ code {
 .movieDetailsInfo {
   margin-left: 20px;
 }
+
+.infoLink {
+  margin-left: 10px;
+  display: block;
+}
+
+.cast,
+.reviews {
+  list-style: none;
+}
