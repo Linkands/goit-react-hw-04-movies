@@ -4,31 +4,35 @@ import { useHistory, useLocation } from 'react-router'
 import MoviesList from '../MoviesList/MoviesList'
 
 function MoviesPage() {
-  const [searchQuery, setSearchQuery] = useState('')
-  const [moviesList, setMoviesList] = useState([])
-
-  const mounted = useRef(false)
   const history = useHistory()
   const location = useLocation()
+  const initQuery = new URLSearchParams(location.search).get('query') ?? ''
+  const [searchQuery, setSearchQuery] = useState(initQuery)
+  const [moviesList, setMoviesList] = useState([])
 
-  useEffect(() => {})
+  const isFirstLoading = useRef(true)
+
+  async function render() {
+    const movie = await fetchMoviesBySearch(searchQuery)
+    setMoviesList(movie)
+    history.push({ ...location, search: `query=${searchQuery}` })
+  }
+
+  const onChangeQuery = ({ target }) => {
+    setSearchQuery(target.value)
+  }
+
   const handleSearch = (e) => {
     e.preventDefault()
-    setSearchQuery(e.target.elements.searchQuery.value)
+    render()
   }
 
   useEffect(() => {
-    if (!mounted.current) {
-      mounted.current = true
-      return
+    if (initQuery !== '' && isFirstLoading.current) {
+      isFirstLoading.current = false
+      render()
     }
-    async function render() {
-      const movie = await fetchMoviesBySearch(searchQuery)
-      setMoviesList(movie)
-      history.push({ ...location, search: `query=${searchQuery}` })
-    }
-    render()
-  }, [searchQuery]) // eslint-disable-line react-hooks/exhaustive-deps
+  })
 
   return (
     <>
@@ -38,6 +42,8 @@ function MoviesPage() {
           placeholder="Search movies"
           autoComplete="off"
           name="searchQuery"
+          onChange={onChangeQuery}
+          value={searchQuery}
         ></input>
         <button type="submit">Search</button>
       </form>

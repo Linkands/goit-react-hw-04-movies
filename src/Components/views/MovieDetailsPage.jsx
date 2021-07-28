@@ -15,32 +15,50 @@ function MovieDetailsPage() {
   const [id, setId] = useState()
   const { url, path } = useRouteMatch()
 
-  const params = useParams()
+  const { movieId } = useParams()
   const IMG_PATH = 'https://image.tmdb.org/t/p/original/'
   const imgNotFound = 'Sorry, no image found'
-  const search = useRef(null)
+  const routerState = useRef(null)
   const history = useHistory()
+  const location = useLocation()
+
+  const goBackLocation = location?.state?.from
+
+  const onClickGoBackBtn = () => {
+    history.push(goBackLocation)
+  }
+  // useEffect(() => {
+  //   if (!routerState.current) {
+  //     routerState.current = location.state
+  //   }
+  // }, [])
+
+  // const handleGoBack = () => {
+  //   const url = routerState.current ? `/?${routerState.current.params}` : '/'
+  //   history.push(url)
+  //   console.log(routerState.current.from.search)
+  //   console.log(url)
+  // }
 
   useEffect(() => {
     async function render() {
-      const movie = await fetchMovieDetails(params.movieId)
+      const movie = await fetchMovieDetails(movieId)
       setId(movie)
     }
     render()
-  }, [params.movieId])
-
-  const goBackBtn = () => {
-    if (search.current?.search) {
-      history.push(`${search.current.pathname}${search.current?.search}`)
-    }
-    history.push('/')
-  }
+  }, [movieId])
 
   return (
     <>
-      <button type="button" onClick={goBackBtn}>
-        Go back
-      </button>
+      {goBackLocation && (
+        <button
+          // onClick={handleGoBack}
+          onClick={onClickGoBackBtn}
+        >
+          Go back
+        </button>
+      )}
+
       <div className="movieDetailsWrapper">
         {id && (
           <>
@@ -74,11 +92,18 @@ function MovieDetailsPage() {
             className="infoLink"
             to={{
               pathname: `${url}/cast`,
+              state: { from: goBackLocation },
             }}
           >
             Cast
           </Link>
-          <Link className="infoLink" to={`${url}/reviews`}>
+          <Link
+            className="infoLink"
+            to={{
+              pathname: `${url}/reviews`,
+              state: { from: goBackLocation },
+            }}
+          >
             Reviews
           </Link>
         </div>
